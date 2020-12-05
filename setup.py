@@ -4,7 +4,7 @@ from os import path
 from setuptools import find_packages, setup
 
 run_requirements = [
-    "loguru==0.2.5",    
+    "loguru==0.2.5",
     "pydantic==1.6.1",
     "fastapi==0.60.1",
     "uvloop==0.14.0rc2",
