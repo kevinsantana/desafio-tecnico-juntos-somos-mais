@@ -9,7 +9,6 @@ run_requirements = [
     "fastapi==0.60.1",
     "uvloop==0.14.0rc2",
     "uvicorn==0.10.3",
-    "psycopg2==2.8.4",
     "pymongo==3.11.1",
     "gunicorn==19.9.0",
     "requests==2.23.0",

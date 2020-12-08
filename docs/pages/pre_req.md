@@ -19,16 +19,3 @@ pip3 install -e .
 * `MONGO_PASS`: Senha do mongodb para armazenamento dos dados de output;
 * `MONGO_USR`: Usuário do mongodb para armazenamento dos dados de output;
 * `MONGO_PORT`: Porta do mongodb para armazenamento dos dados de output;
-
-* `POSTGRES_DB`: _database_ criado no momento de execução do container;
-* `POSTGRES_USER`: _Username_ criado no momento de execução do container;
-* `POSTGRES_PASSWORD`: _Password_ criado no momento de execução do container;
-
-* `PGSQL_DB`: Nome do postgres para armazenamento dos dados de input;
-* `PGSQL_HOST`: _Hostname_ do postgres;
-* `PGSQL_PASS`: Senha do postgres para armazenamento dos dados de input;
-* `PGSQL_USR`: Usuário do postgres para armazenamento dos dados de input;
-* `PGSQL_PORT`: Porta do postgres para armazenamento dos dados de input;
-
-* `PGADMIN_DEFAULT_EMAIL`: Email para login no pgAdmin, necessário para execução do container.
-* `PGADMIN_DEFAULT_PASSWORD`: Senha para login no pgAdmin, necessário para execução do container.
