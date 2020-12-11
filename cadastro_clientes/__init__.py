@@ -46,7 +46,7 @@ app.include_router(v1, prefix="/v1")
 app.include_router(doc_sphinx.router)
 app.mount("/_static", StaticFiles(directory="./docs/_build/html/_static"), name="static")
 app.mount("/pages", StaticFiles(directory="./docs/_build/html/pages"), name="pages")
-# app.mount("/_images", StaticFiles(directory="./docs/_build/html/_images"), name="images")
+app.mount("/_images", StaticFiles(directory="./docs/_build/html/_images"), name="images")
 app.mount("/_sources", StaticFiles(directory="./docs/_build/html/_sources"), name="sources")
 
 

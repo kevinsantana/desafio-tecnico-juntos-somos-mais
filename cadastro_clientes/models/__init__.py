@@ -1,10 +1,13 @@
-from typing import Optional, TypeVar, Dict
+from typing import Optional, TypeVar, Dict, List
 
 from pydantic import BaseModel, Field
 
 
-FloatOrNone = TypeVar('FloatOrNone', float, None)
-DictOrNone = TypeVar('DictOrNone', Dict, None)
+StrOrNone = TypeVar("StrOrNone", str, None)
+FloatOrNone = TypeVar("FloatOrNone", float, None)
+DictOrNone = TypeVar("DictOrNone", Dict, None)
+DictOrStr = TypeVar("DictOrStr", Dict, str)
+ListOrNone = TypeVar("ListOrNone", List, None)
 
 
 class Pagination(BaseModel):

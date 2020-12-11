@@ -1,0 +1,13 @@
+{
+        "collection": "input",
+        "gender": "string",
+        "name": {},
+        "location": {},
+        "email": "string",
+        "dob": {},
+        "registered": {},
+        "phone": "string",
+        "cell": "string",
+        "picture": {}
+    
+}

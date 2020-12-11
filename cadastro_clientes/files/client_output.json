@@ -1,0 +1,15 @@
+{
+        "collection": "output",
+        "type": "string",
+        "gender": "char",
+        "name": {},
+        "location": {},
+        "email": "string",
+        "birthday": "string",
+        "registered": "string",
+        "telephoneNumbers": [],
+        "mobileNumbers": [],
+        "picture": {},
+        "nationality": "BR",
+        "ObjectIdInput": "string"    
+}
