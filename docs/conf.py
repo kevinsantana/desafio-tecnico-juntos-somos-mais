@@ -14,8 +14,9 @@ import os
 import sys
 
 
-sys.path.insert(0, os.path.abspath("../cadastro_clientes"))
-
+sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath("../cadastro_clientes/"))
 
 # -- Project information -----------------------------------------------------
 

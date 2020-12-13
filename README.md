@@ -6,13 +6,13 @@ A solução executa um pré-tratamento dos dados, classifica os clientes e persi
 
 A API foi construída com [FastApi](https://fastapi.tiangolo.com/), que possuí uma excelente validação de tipos, tanto de entrada como de saída da API, usando [Pydantic](https://pydantic-docs.helpmanual.io/). Além disso `FastApi` documenta automaticamente a API utlizando [OpenAPI](https://github.com/OAI/OpenAPI-Specification).
 
-### Prerequisites
+## Prerequisites
 
 Sugere-se a criação de um ambiente virtual para instalação das dependências da aplicação, como por exemplo o [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/).
 
 Para instalar as dependências do projeto, execute:
 
-```
+```bash
 pip3 install -e .
 ```
 
@@ -32,13 +32,13 @@ pip3 install -e .
 
 A execução da aplicação é dividida em duas partes: `build` das imagens consumidas pelos containers e a execução dos containers. Para o [build](./build.sh) das imagens é necessário executar o seguinte comando:
 
-```
+```bash
 bash build.sh
 ```
 
 Com as imagens _buildadas_ é possível executar os containers, através do comando:
 
-```
+```bash
 bash run.sh
 ```
 
@@ -46,35 +46,37 @@ Com a aplicação no ar, basta acessar o [ReDoc](http://localhost:7000/v1/docs) 
 
 ## Executando testes
 
-Os testes da aplicação realizam a validação das respostas as requisições dos endpoints e a comunicação com outras soluções que compõem esta aplicação.
+Os testes da aplicação realizam a validação das respostas às requisições dos endpoints, validando o código de retorno esperado, o conteúdo do retorno e o tipo do retorno.
 
-É possível executar os testes de forma _dockerizada_ conforme instruções abaixo:
+O ideal é que os testes sejam executados de forma _dockerizada_, para tanto,  é preciso que os _containers_ da API e do banco de dados estejam em execução, o que pode ser feito seguindo as instruções em [Instalação e Execução]().
 
+Com o container da API nomeado como `cadastro`, execute:
+
+```bash
+docker container exec -it cadastro pytest -v
 ```
-docker container exec -it cadastro_clientes pytest
-```
 
-ou, ainda, através de um terminal no mesmo nível de pastas da pasta [cadastro_clientes](./cadastro_clientes), sem a execução da aplicação dentro de um _container_, da seguinte maneira
+ou, ainda, desde que se possua um banco de dados `mongoDB` em execução na sua máquina, e com as mesmas configurações do arquivo [mongo-init.js](./cadastro_clientes/script/mongo-init.js), é possível executar os testes através de um terminal no mesmo nível de pastas da pasta [cadastro_clientes](./cadastro_clientes), da seguinte maneira:
 
-```
+```bash
 pip3 install pytest
-pytest
+pytest -v
 ```
 
 ### Estilo de código
 
 Esse código segue o padrão PEP8 e pode ser testado com a biblioteca [PyLama](https://github.com/klen/pylama) como no exemplo a seguir
 
-```
+```bash
 pip3 install pylama
 pylama -o pylama.ini .
 ```
 
 ## Deploy
 
-O deploy pode ser feito...
+Com a aplicação _dockerizada_ e testada, é possível efetuar o _deploy_ em um orquestrador de _containers_ a exemplo do [Kubernetes](https://kubernetes.io/pt/), ou mesmo, com o orquestrador nativo do Docker - [Swarm](https://docs.docker.com/engine/swarm/).
 
-## Ferramentas
+## Construído Com
 
 * [loguru](https://github.com/Delgan/loguru)
 * [pydantic](https://pydantic-docs.helpmanual.io)
@@ -83,6 +85,7 @@ O deploy pode ser feito...
 * [gunicorn](https://gunicorn.org)
 * [requests](https://requests.readthedocs.io/en/master/)
 * [sphinx](https://www.sphinx-doc.org/en/master/)
+* [uvloop](uvloop)
 
 ## Versionamento
 
