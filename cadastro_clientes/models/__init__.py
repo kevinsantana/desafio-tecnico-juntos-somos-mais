@@ -8,6 +8,7 @@ FloatOrNone = TypeVar("FloatOrNone", float, None)
 DictOrNone = TypeVar("DictOrNone", Dict, None)
 DictOrStr = TypeVar("DictOrStr", Dict, str)
 ListOrNone = TypeVar("ListOrNone", List, None)
+DictStrOrNone = TypeVar("DictStrOrNone", DictOrStr, None)
 
 
 class Pagination(BaseModel):

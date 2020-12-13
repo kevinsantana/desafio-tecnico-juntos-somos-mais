@@ -2,8 +2,6 @@ import abc
 
 from pymongo import MongoClient
 
-from loguru import logger
-
 from cadastro_clientes.config import (
     MONGO_DB, MONGO_HOST, MONGO_PASS, MONGO_PORT, MONGO_USR
     )
@@ -19,11 +17,11 @@ class Database:
 
     def insert(self, collection: str, document: dict) -> str:
         """
-        Insere um documento em uma coleção.
+        Insere um documento em uma collection.
 
         :param collection: Nome da collection onde o documento será inserido
         :type collection: str
-        :param document: documento a ser inserido
+        :param document: Documento a ser inserido
         :type document: dict
         :return: id gerado
         :rtype: str
@@ -38,7 +36,7 @@ class Database:
         """
         Recupera todos os documentos de uma collection
 
-        :param collection: nome da collection
+        :param collection: Nome da collection
         :type collection: str
         :param fields: Lista de campos no resultado
         :type fields: list
@@ -50,28 +48,31 @@ class Database:
         :type qtd: int
         :param filter: Query para filtrar elementos
         :type filter: list
-        :return: tupla com documentos da collection e total de documentos
+        :return: Tupla com documentos da collection e total de documentos
         :rtype: tuple
         """
         self.__connect()
-        projection = {field: 1 for field in fields}
-        documents = self.__db[collection].find(filter=filter, projection=projection)
+        if fields:
+            projection = {field: 1 for field in fields}
+            documents = self.__db[collection].find(filter=filter, projection=projection)
+        else:
+            documents = self.__db[collection].find(filter=filter)
         total = documents.count()
         documents = documents.sort(sort_options).skip(offset).limit(qtd)
         self.__disconnect()
         return documents, total
 
-    def find(self, collection: str, filter: dict, sort_options: list = []):
+    def find_one(self, collection: str, filter: dict, sort_options: list = []):
         """
         Busca um documento
 
-        :param collection: Nome da coleção
+        :param collection: Nome da collection
         :type collection: str
         :param filter: Query para filtrar elementos
         :type filter: dict
         :param sort_options: Opções de ordenação
         :type sort_options: list
-        :return: documento encontrado
+        :return: Documento encontrado
         :rtype: dict
         """
         self.__connect()
@@ -79,33 +80,34 @@ class Database:
         self.__disconnect()
         return document
 
-    def update(self, collection: str, query: str, values: str):
+    def delete_one(self, collection: str, filter: dict):
         """
-        Atualiza um documento
+        Deleta um documento.
 
-        :param collection: nome da collection
+        :param collection: Nome da collection
         :type collection: str
-        :param query: Query para filtrar elementos
-        :type query: str
-        :param values: valores a serem atualizados
-        :type values: str
+        :param filter: Query para filtrar elemento
+        :type filter: dict
+        :return: True se o documento tiver sido deletado, False caso contrário
+        :rtype: boolean
         """
         self.__connect()
-        logger.debug([collection, query, values])
-        self.__db[collection].update_one(query, {"$set": values})
+        delete_count = self.__db[collection].delete_one(filter=filter).deleted_count
         self.__disconnect()
+        return True if delete_count == 1.0 else False
 
-    def get_collections(self):
+    def delete_collection(self, collection: str):
         """
-        Recupera as coleções do banco de dados
+        Deleta uma collection.
 
-        :return: coleções
-        :rtype: dict
+        :param collection: Nome da collection
+        :type collection: str
+        :return: True se a collection tiver sido deletado, False caso contrário
+        :rtype: boolean
         """
         self.__connect()
-        collections = self.__db.list_collection_names()
-        self.__disconnect()
-        return collections
+        result = self.__db.drop_collection(collection)
+        return True if "ok" in result else False
 
     @abc.abstractclassmethod
     def dict(self):

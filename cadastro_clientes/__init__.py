@@ -7,16 +7,16 @@ import traceback
 
 from loguru import logger
 from fastapi import FastAPI
-from fastapi.exceptions import RequestValidationError
-from fastapi.staticfiles import StaticFiles
 from starlette.requests import Request
+from fastapi.staticfiles import StaticFiles
 from starlette.responses import JSONResponse
 from starlette.exceptions import HTTPException
 from starlette.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
 
-from cadastro_clientes.exceptions import CadastroClientesException
 from cadastro_clientes.resources import v1
 from cadastro_clientes.resources.v1 import doc_sphinx
+from cadastro_clientes.exceptions import ClientException
 
 
 urllib3.disable_warnings()
@@ -29,11 +29,11 @@ logger.level("STATUS ALERT", no=42, color="<blue>")
 logger.level("STATUS ERROR", no=500, color="<red>")
 
 
-DESCRIPTION = open("./cadastro_clientes/files/description.html").read()
+description = open("./cadastro_clientes/files/description.html").read()
 
 app = FastAPI(
     title="DESAFIO TÉCNICO JUNTOS SOMOS MAIS - CADASTRO DE CLIENTES",
-    description=DESCRIPTION,
+    description=description,
     version=__version__,
     docs_url="/v1/swagger",
     redoc_url="/v1/docs"
@@ -68,8 +68,8 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
-@app.exception_handler(CadastroClientesException)
-async def camara_exception_handler(request: Request, exception: CadastroClientesException):
+@app.exception_handler(ClientException)
+async def camara_exception_handler(request: Request, exception: ClientException):
     return JSONResponse(
         status_code=exception.status_code,
         content={
