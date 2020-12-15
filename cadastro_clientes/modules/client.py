@@ -34,7 +34,7 @@ def find_by_region_and_type(region: str, client_type: str, offset: str, qtd: str
     :raises FilterClientException: Caso não sejam informados região e classificação do cliente
     """
     if not region and not client_type:
-        raise FilterClientException(region=region, client_type=client_type)
+        raise FilterClientException(416, region=region, client_type=client_type)
     clients, total = Client(collection=collection).find_by_region_and_type(region=region, client_type=client_type,
                                                                            offset=offset-1, qtd=qtd)
     return [client for client in clients], total
@@ -54,7 +54,7 @@ def find_by_id(collection: str, client_id: str):
     """
     client = Client(collection=collection).find_by_id(collection=collection, client_id=client_id)
     if not client:
-        raise ClientNotFoundException(client_id)
+        raise ClientNotFoundException(404, client_id)
     return client
 
 
@@ -73,7 +73,7 @@ def delete_one(collection: str, client_id: str):
     if Client(collection=collection).delete_one(collection=collection, client_id=client_id):
         return True
     else:
-        raise ClientNotFoundException(client_id)
+        raise ClientNotFoundException(404, client_id)
 
 
 def delete_collection(collection: str):
@@ -89,4 +89,4 @@ def delete_collection(collection: str):
     if Client(collection=collection).delete_collection(collection):
         return True
     else:
-        ColllectionNotFoundException(collection)
+        ColllectionNotFoundException(404, collection)

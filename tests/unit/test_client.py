@@ -69,7 +69,7 @@ class TestClientOutput(unittest.TestCase):
     def setUp(self):
         self.client_output = {
             "collection": "test",
-            "client_type": "a",
+            "client_type": "normal",
             "gender": "m",
             "name": {
                 "title": "mr",
@@ -108,21 +108,33 @@ class TestClientOutput(unittest.TestCase):
             "nationality": "BR",
             "object_id_input": "33333333333"
         }
-        self.response_insert = [client.post("/v1/client/insert", json=self.client_output) for _ in range(15)]
+        self.registry_qtd = 15
+        self.response_insert = [client.post("/v1/client/insert",
+                                            json=self.client_output)
+                                for _ in range(self.registry_qtd)]
         self.client_collection = self.client_output["collection"]
         self.client_type = self.client_output["client_type"]
         self.client_region = self.client_output["location"]["region"]
-        # self.response_get_by_type_and_region = client.get(f"/v1/client/{self.client_collection}/{self.client_type}/{self.client_region}") # noqa
+        self.response_get_by_type_and_region = client.get(f"/v1/client/{self.client_collection}/{self.client_type}/{self.client_region}?offset=1&qtd={self.registry_qtd}") # noqa
 
     def test_client_output_insert(self):
         self.assertTrue(all(filter(lambda x: x == 201, [response.status_code for response in self.response_insert])))
         self.assertTrue(all(filter(lambda x: x == "result", [response.json() for response in self.response_insert])))
         self.assertTrue(all(filter(lambda x: issubclass(list, type(x)), [response.json() for response in self.response_insert]))) # noqa
 
-#     def test_client_output_get_by_type_and_region(self):
-#         self.assertEqual(self.response_get_by_type_and_region.status_code, 200)
-#         self.assertIn("result", self.response_get_by_type_and_region.json())
-#         self.assertIs(type(self.response_get_by_type_and_region.json().get("result")), dict)
+    def test_client_output_get_by_type_and_region(self):
+        self.assertTrue(all(map(lambda x: x in {"result", "pagination"}, self.response_get_by_type_and_region.json())))
+        self.assertEqual(list(map(lambda x: len(x), self.response_get_by_type_and_region.json().values())), [self.registry_qtd, 5]) # noqa
+
+    def test_client_output_get_by_type_and_region_pagination(self):
+        self.registry_qtd = 10
+        self.response_get_by_type_and_region = client.get(f"/v1/client/{self.client_collection}/{self.client_type}/{self.client_region}?offset=1&qtd={self.registry_qtd}") # noqa
+        self.correct_pagination_response = [("next", "http://testserver/v1/client/test/normal/sul?qtd=10&offset=2"),
+                                            ("previous", ""), ("first", ""),
+                                            ("last", "http://testserver/v1/client/test/normal/sul?qtd=10&offset=2"),
+                                            ("total", 2)]
+        self.assertEqual(self.correct_pagination_response,
+                         list(self.response_get_by_type_and_region.json()["pagination"].items()))
 
     def tearDown(self):
         self.response_delete = client.delete(f"/v1/client/{self.client_collection}")
