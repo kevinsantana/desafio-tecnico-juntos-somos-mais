@@ -1,14 +1,9 @@
-from typing import Optional, TypeVar, Dict, List
+from typing import Optional, NewType
 
 from pydantic import BaseModel, Field
 
 
-StrOrNone = TypeVar("StrOrNone", str, None)
-FloatOrNone = TypeVar("FloatOrNone", float, None)
-DictOrNone = TypeVar("DictOrNone", Dict, None)
-DictOrStr = TypeVar("DictOrStr", Dict, str)
-ListOrNone = TypeVar("ListOrNone", List, None)
-DictStrOrNone = TypeVar("DictStrOrNone", DictOrStr, None)
+ObjectID = NewType("ObjectId", str)
 
 
 class Pagination(BaseModel):

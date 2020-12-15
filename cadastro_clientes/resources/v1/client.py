@@ -3,9 +3,9 @@ from fastapi import APIRouter, Body, Request, Query
 from cadastro_clientes.resources.v1 import mount_pagination
 from cadastro_clientes.modules import client as cl
 from cadastro_clientes.models.client import (
-        InsertClientRequest, InsertClientResponse, CLIENT_DEFAULT_RESPONSE, LIST_FILTER_CLIENT_RESPONSE,
+        Client, InsertClientResponse, CLIENT_DEFAULT_RESPONSE, LIST_FILTER_CLIENT_RESPONSE,
         ListFilterClientResponse, FindClientByIdResponse, FIND_CLIENT_BY_ID_RESPONSE, DeleteClientByIdResponse,
-        DELETE_CLIENT_BY_ID_RESPONSE, DELETE_COLLECTION_RESPONSE, DeleteCollectionResponse
+        DELETE_CLIENT_BY_ID_RESPONSE, DELETE_COLLECTION_RESPONSE, DeleteCollectionResponse, ClientRegion, ClientType
         )
 
 router = APIRouter()
@@ -14,7 +14,7 @@ router = APIRouter()
 @router.post("/insert", response_model=InsertClientResponse, status_code=201,
              summary="Gravar um cliente no banco de dados", responses=CLIENT_DEFAULT_RESPONSE)
 async def save_client(
-    client_data: InsertClientRequest = Body(
+    client_data: Client = Body(
         ...,
         example={
                 "collection": "colecao",
@@ -79,22 +79,25 @@ async def save_client(
 
 @router.get("/{collection}/{client_type}/{region}", status_code=200,
             summary="Lista os clientes a partir da região e do tipo",
-            response_model=ListFilterClientResponse, responses=LIST_FILTER_CLIENT_RESPONSE)
+            response_model=ListFilterClientResponse, responses=LIST_FILTER_CLIENT_RESPONSE,
+            response_model_exclude_none=True)
 def find_by_region_and_type(request: Request,
-                            region: str = Query(..., description="Região do cliente"),
-                            client_type: str = Query(..., description="Tipo do cliente"),
+                            region: ClientRegion = Query(..., description="Região do cliente"),
+                            client_type: ClientType = Query(..., description="Tipo do cliente"),
                             offset: int = Query(1, description="Página atual de retorno", gt=0),
                             qtd: int = Query(10, description="Quantidade de registros de retorno", gt=0),
                             collection: str = Query(None, description="Collection que o cliente(s) filtrado pertence")):
     """
     Filtrar um cliente por região e tipo, paginando o resultado
     """
-    clients, total = cl.find_by_region_and_type(region, client_type, offset, qtd)
+    clients, total = cl.find_by_region_and_type(region=region, client_type=client_type,
+                                                offset=offset, qtd=qtd, collection=collection)
     return mount_pagination(clients, qtd, offset, total, str(request.url))
 
 
 @router.get("/{collection}/{client_id}", status_code=200, summary="Busca o cliente a partir do id",
-            response_model=FindClientByIdResponse, responses=FIND_CLIENT_BY_ID_RESPONSE)
+            response_model=FindClientByIdResponse, responses=FIND_CLIENT_BY_ID_RESPONSE,
+            response_model_exclude_none=True)
 def find_by_id(collection: str = Query(..., description="Coleção do cliente buscado"),
                client_id: str = Query(..., description="Id do cliente")):
     return {"result": cl.find_by_id(collection, client_id)}

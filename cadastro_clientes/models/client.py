@@ -1,60 +1,58 @@
-from typing import List, Optional
+from enum import Enum
+from typing import List, Optional, Union
 
 from pydantic import BaseModel, Field
 
 from cadastro_clientes.models import (
-    parse_openapi, DictOrStr, Pagination, Message
+    ObjectID, parse_openapi, Pagination, Message
     )
 
 
-class Register(BaseModel):
-    registered: Optional[DictOrStr]
+class ClientRegion(str, Enum):
+    norte = "norte"
+    nordeste = "nordeste"
+    centro_oeste = "centro_oeste"
+    sudeste = "sudeste"
+    sul = "sul"
 
 
-class InsertClientRequest(BaseModel):
+class ClientType(str, Enum):
+    especial = "especial"
+    normal = "normal"
+    trabalhoso = "trabalhoso"
+
+
+class Client(BaseModel):
+    _id: ObjectID
     collection: str
-    client_type: Optional[str] = None
+    client_type: Optional[str]
     gender: str
     name: dict
     location: dict
     email: str
     picture: dict
-    dob: Optional[dict] = None
-    phone: Optional[str] = None
-    cell: Optional[str] = None
-    birthday: Optional[str] = None
-    registered: Optional[DictOrStr] = None
-    telephone_numbers: Optional[list] = None
-    mobile_numbers: Optional[list] = None
-    nationality: Optional[str] = None
-    object_id_input: Optional[str] = None
+    dob: Optional[dict]
+    phone: Optional[str]
+    cell: Optional[str]
+    birthday: Optional[str]
+    registered: Union[dict, str]
+    telephone_numbers: Optional[list]
+    mobile_numbers: Optional[list]
+    nationality: Optional[str]
+    object_id_input: Optional[str]
 
 
 class InsertClientResponse(BaseModel):
     result: List[str] = Field(..., description="ObjectId do cliente inserido")
 
 
-class ListClientOutputResponse(BaseModel):
-    client_type: str
-    gender: str
-    name: dict
-    location: dict
-    email: str
-    birthday: str
-    registered: str
-    telephone_numbers: list
-    mobile_numbers: list
-    picture: dict
-    nationality: str
-
-
 class ListFilterClientResponse(BaseModel):
-    result: List[ListClientOutputResponse]
+    result: List[Client]
     pagination: Pagination = Field(..., description="Dados de paginação")
 
 
 class FindClientByIdResponse(BaseModel):
-    result: InsertClientRequest = Field(..., description="Dados do cliente")
+    result: Client
 
 
 class DeleteClientByIdResponse(BaseModel):
