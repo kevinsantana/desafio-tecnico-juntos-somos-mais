@@ -32,12 +32,6 @@ Links
    /pages/made_with.md
    /pages/deploy.md
 
-.. toctree::
-   :maxdepth: 3
-   :caption: Arquiteura do Projeto
-
-   /pages/general_architecturev.md
-   /pages/full_architecture.md
 
 .. toctree::
    :maxdepth: 2

@@ -1,4 +1,4 @@
-__version__ = "0.1.3"
+__version__ = "0.1.5"
 
 import time
 import uuid
@@ -15,9 +15,10 @@ from starlette.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 
 from cadastro_clientes.resources import v1
+from cadastro_clientes.files import html_description
 from cadastro_clientes.resources.v1 import doc_sphinx
 from cadastro_clientes.exceptions import ClientException
-
+from docs import build_html_pages, build_html_static, build_html_source
 
 urllib3.disable_warnings()
 
@@ -29,7 +30,7 @@ logger.level("STATUS ALERT", no=42, color="<blue>")
 logger.level("STATUS ERROR", no=500, color="<red>")
 
 
-description = open("./cadastro_clientes/files/description.html").read()
+description = open(html_description).read()
 
 app = FastAPI(
     title="DESAFIO TÉCNICO JUNTOS SOMOS MAIS - CADASTRO DE CLIENTES",
@@ -44,10 +45,9 @@ app.include_router(v1, prefix="/v1")
 
 # sphinx
 app.include_router(doc_sphinx.router)
-app.mount("/_static", StaticFiles(directory="./docs/_build/html/_static"), name="static")
-app.mount("/pages", StaticFiles(directory="./docs/_build/html/pages"), name="pages")
-app.mount("/_images", StaticFiles(directory="./docs/_build/html/_images"), name="images")
-app.mount("/_sources", StaticFiles(directory="./docs/_build/html/_sources"), name="sources")
+app.mount("/pages", StaticFiles(directory=build_html_pages), name="pages")
+app.mount("/_static", StaticFiles(directory=build_html_static), name="static")
+app.mount("/_sources", StaticFiles(directory=build_html_source), name="sources")
 
 
 @app.middleware("http")
