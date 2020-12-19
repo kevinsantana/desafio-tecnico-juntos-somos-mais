@@ -1,7 +1,6 @@
 import pymongo
 from bson import ObjectId
 
-
 from cadastro_clientes.database import Database
 
 
@@ -12,8 +11,8 @@ class Client(Database):
                  cell: str = None, client_type: str = None, birthday: float = None,
                  telephone_numbers: list = None, mobile_numbers: list = None,
                  nationality: str = None, object_id_input: str = None):
-        self.__id = _id
         self.__collection = collection
+        self.__id = _id
         self.__gender = gender
         self.__name = name
         self.__location = location
@@ -33,10 +32,6 @@ class Client(Database):
     @property
     def id(self):
         return str(self.__id)
-
-    @id.setter
-    def id(self, client_id: str):
-        self.__id = ObjectId(client_id)
 
     @property
     def collection(self):
@@ -100,12 +95,25 @@ class Client(Database):
 
     @property
     def object_id_input(self):
-        return self.__object_id_input
+        return str(self.__object_id_input)
+
+    @object_id_input.setter
+    def object_id_input(self, object_id: str):
+        if isinstance(object_id, str):
+            self.__object_id_input = ObjectId(object_id)
 
     def dict(self) -> dict:
-        return {key.replace("_Client__", ""): value for key, value in self.__dict__.items() if value}
+        new_dict = dict()
+        for key, value in self.__dict__.items():
+            if value and key != "_Client__id":
+                new_dict[key.replace("_Client__", "")] = value
+            elif value and key == "_Client__id":
+                new_dict[key.replace("_Client_", "")] = value
+        return new_dict
 
     def insert(self):
+        if self.__object_id_input:
+            self.object_id_input = self.object_id_input
         document_id = super().insert(collection=self.__collection, document=self.dict())
         return document_id
 
@@ -117,7 +125,8 @@ class Client(Database):
                                             sort_options=sort_options,
                                             offset=offset, qtd=qtd,
                                             filter=query)
-        return [Client(**document).dict() for document in documents], total
+        clients = [Client(**document).dict() for document in documents]
+        return clients, total
 
     def find_by_id(self, collection: str, client_id: str):
         sort_options = [("$natural", pymongo.ASCENDING)]

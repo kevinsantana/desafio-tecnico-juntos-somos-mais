@@ -28,7 +28,7 @@ DEFAULT_RESPONSES = [
 ]
 
 
-def parse_openapi(responses: list = list()) -> dict:
+def parse_openapi(responses: list = []) -> dict:
     responses.extend(DEFAULT_RESPONSES)
     return {example.status: {"content": {"application/json": {"example": example.dict()}}, "model": Message}
             for example in responses}

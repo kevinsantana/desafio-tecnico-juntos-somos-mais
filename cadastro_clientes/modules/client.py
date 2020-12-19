@@ -1,7 +1,16 @@
+from loguru import logger
+
 from cadastro_clientes.database.client import Client
 from cadastro_clientes.exceptions.client import (
     ClientNotFoundException, ColllectionNotFoundException, FilterClientException
     )
+
+
+def _objectId_to_str(client: dict):
+    client.update({"_id": str(client.get("_id")),
+                   "object_id_input": str(client.get("object_id_input"))
+                   if client.get("object_id_input") else None})
+    return client
 
 
 def insert(client_data: dict) -> dict:
@@ -13,6 +22,7 @@ def insert(client_data: dict) -> dict:
     :return: ObjectId do documento gravado
     :rtype: str
     """
+    logger.debug(client_data)
     return Client(**client_data).insert()
 
 
@@ -37,7 +47,8 @@ def find_by_region_and_type(region: str, client_type: str, offset: str, qtd: str
         raise FilterClientException(416, region=region, client_type=client_type)
     clients, total = Client(collection=collection).find_by_region_and_type(region=region, client_type=client_type,
                                                                            offset=offset-1, qtd=qtd)
-    return [client for client in clients], total
+    # logger.debug(clients[-1].keys())
+    return [_objectId_to_str(client) for client in clients], total
 
 
 def find_by_id(collection: str, client_id: str):
@@ -55,6 +66,7 @@ def find_by_id(collection: str, client_id: str):
     client = Client(collection=collection).find_by_id(collection=collection, client_id=client_id)
     if not client:
         raise ClientNotFoundException(404, client_id)
+    client = _objectId_to_str(client)
     return client
 
 

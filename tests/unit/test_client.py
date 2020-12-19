@@ -57,12 +57,12 @@ class TestInsertClientInput(unittest.TestCase):
     def test_client_input_get_by_id(self):
         self.assertEqual(self.response_get_client.status_code, 200)
         self.assertIn("result", self.response_get_client.json())
-        self.assertIs(type(self.response_get_client.json().get("result")), dict)
+        self.assertIs(type(self.response_get_client.json().get("result")), list)
 
     def tearDown(self):
         self.response_delete = client.delete(f"/v1/client/{self.client_collection}")
         self.assertEqual(self.response_delete.status_code, 200)
-        self.assertEqual(self.response_delete.json()["result"], True)
+        self.assertEqual(self.response_delete.json()["result"][0], True)
 
 
 class TestClientOutput(unittest.TestCase):
@@ -106,7 +106,7 @@ class TestClientOutput(unittest.TestCase):
                 "thumbnail": "https://randomuser.me/api/portraits/thumb/men/83.jpg"
             },
             "nationality": "BR",
-            "object_id_input": "33333333333"
+            "object_id_input": "5fde4604c11bbefc9b217f62"
         }
         self.registry_qtd = 15
         self.response_insert = [client.post("/v1/client/insert",
@@ -139,7 +139,7 @@ class TestClientOutput(unittest.TestCase):
     def tearDown(self):
         self.response_delete = client.delete(f"/v1/client/{self.client_collection}")
         self.assertEqual(self.response_delete.status_code, 200)
-        self.assertEqual(self.response_delete.json()["result"], True)
+        self.assertEqual(self.response_delete.json()["result"][0], True)
 
 
 if __name__ == "__main__":
