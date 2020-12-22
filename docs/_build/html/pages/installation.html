@@ -105,6 +105,10 @@
 <li class="toctree-l2"><a class="reference internal" href="database.html#cliente">Cliente</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="script.html">Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="script.html#carga-do-banco-de-dados">Carga do Banco de Dados</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -151,15 +155,20 @@
             
   <div class="section" id="instalacao-e-execucao">
 <h1>Instalação e Execução<a class="headerlink" href="#instalacao-e-execucao" title="Link permanente para este título">¶</a></h1>
-<p>A execução da aplicação é dividida em duas partes: <code class="docutils literal notranslate"><span class="pre">build</span></code> das imagens consumidas pelos containers e a execução dos containers. Para o <a class="reference external" href="build.sh">build</a> das imagens é necessário executar o seguinte comando:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">build</span><span class="o">.</span><span class="n">sh</span>
+<p>A execução da aplicação é dividida em duas partes: <code class="docutils literal notranslate"><span class="pre">build</span></code> das imagens consumidas pelos containers e a execução dos containers. Para o <a class="reference external" href="./build.sh">build</a> das imagens é necessário executar o seguinte comando:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash build.sh
 </pre></div>
 </div>
 <p>Com as imagens <em>buildadas</em> é possível executar os containers, através do comando:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">run</span><span class="o">.</span><span class="n">sh</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash run.sh
 </pre></div>
 </div>
-<p>Com a aplicação no ar, basta acessar o <a class="reference external" href="http://localhost:7000/v1/docs">ReDoc</a> para saber como utilizar cada um dos <em>endpoints</em> e para utilizar os <em>endpoints</em> acesse o <a class="reference external" href="http://localhost:7000/v1/swagger">Swagger</a></p>
+<p>Com a aplicação no ar, basta acessar o <a class="reference external" href="http://localhost:7000/v1/docs">ReDoc</a> para saber como utilizar cada um dos <em>endpoints</em> e para utilizar os <em>endpoints</em> acesse o <a class="reference external" href="http://localhost:7000/v1/swagger">Swagger</a>.</p>
+<p>Antes de iniciar a aplicação, verifique se a base de dados foi carregada conferindo os <em>logs</em> do container <code class="docutils literal notranslate"><span class="pre">etl_clientes</span></code>, através do comando:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker container logs -f etl_clientes
+</pre></div>
+</div>
+<p>Além de poder verificar a quantidade e o andamento da carga da base de dados é possível verificar se o status da aplicação está em <code class="docutils literal notranslate"><span class="pre">Ready</span></code>, dessa maneira é possível consumir os <em>endpoints</em>.</p>
 </div>
 
 

@@ -39,6 +39,7 @@ Links
 
    /pages/modules
    /pages/database
+   /pages/script
 
 
 

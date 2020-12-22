@@ -26,9 +26,8 @@ logger.add("cadastro_clientes.log", rotation="500 MB")
 
 logger.level("REQUEST RECEBIDA", no=38, color="<yellow>")
 logger.level("REQUEST FINALIZADA", no=39, color="<green>")
-logger.level("CLIENT INPUT ALERT", no=42, color="<blue>")
 logger.level("CLIENT INPUT ERROR", no=500, color="<red>")
-logger.level("API STATUS", no=500, color="<white>")
+logger.level("API STATUS", no=500, color="<blue>")
 
 
 description = open(html_description).read()

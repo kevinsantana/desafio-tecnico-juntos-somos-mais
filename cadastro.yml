@@ -16,10 +16,10 @@ services:
     networks: 
       - cadastro-network  
 
-  etl-clientes:
-    container_name: etl-clientes
+  etl_clientes:
+    container_name: etl_clientes
     image: cadastro_clientes:1.0.0
-    command: python3 /deploy/cadastro_clientes/script/format_client_input.py
+    command: python3 /deploy/cadastro_clientes/script/etl_client.py
     environment:
       - MONGO_DB
       - MONGO_HOST
@@ -37,6 +37,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: cadastro_clientes:1.0.0
+    command: ["gunicorn", "--bind=0.0.0.0:7000", "--workers=3", "--worker-class=uvicorn.workers.UvicornWorker", "--timeout=174000", "cadastro_clientes:app"]
     environment:
       - MONGO_DB
       - MONGO_HOST
@@ -50,6 +51,7 @@ services:
     networks:
       - cadastro-network
     depends_on:
+      - etl_clientes
       - db_cadastro
 
 networks:

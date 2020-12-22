@@ -16,6 +16,7 @@ run_requirements = [
     "recommonmark==0.6.0",
     "aiofiles==0.5.0",
     "numpy==1.19.4",
+    "pandas==1.1.5",
 ]
 
 here = path.abspath(path.dirname(__file__))
@@ -25,7 +26,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as readme:
 
 setup(
     name="cadastro_clientes",
-    version="0.1.0",
+    version="0.1.5",
     author="Kevin de Santana Araujo",
     author_email="kevin_santana.araujo@hotmail.com",
     packages=find_packages(exclude=["docs", "tests"]),

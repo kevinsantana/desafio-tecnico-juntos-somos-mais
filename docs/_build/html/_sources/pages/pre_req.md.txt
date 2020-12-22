@@ -1,10 +1,10 @@
-### Prerequisites
+# Prerequisites
 
 Sugere-se a criação de um ambiente virtual para instalação das dependências da aplicação, como por exemplo o [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/).
 
 Para instalar as dependências do projeto, execute:
 
-```
+```bash
 pip3 install -e .
 ```
 

@@ -11,8 +11,8 @@ MONGO_PORT = os.environ.get("MONGO_PORT", "27017")
 
 
 # Aplicação
-CLIENT_INPUT_JSON = os.environ.get("CLIENT_INPUT_JSON" ,"https://storage.googleapis.com/juntossomosmais-code-challenge/input-backend.json") #noqa
-CLIENT_INPUT_CSV = os.environ.get("CLIENT_INPUT_CSV", "https://storage.googleapis.com/juntossomosmais-code-challenge/input-backend.csv") #noqa
+CLIENT_INPUT_URL = os.environ.get("CLIENT_INPUT_URL" ,"https://storage.googleapis.com/juntossomosmais-code-challenge/input-backend.json") #noqa
+# CLIENT_INPUT_URL = os.environ.get("CLIENT_INPUT_URL", "https://storage.googleapis.com/juntossomosmais-code-challenge/input-backend.csv") #noqa
 CLIENT_CLASSIFICATION = {
         "especial": {
             "latitude": np.linspace(-46.361_899, -34.276_938, 10_000),

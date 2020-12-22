@@ -5,7 +5,7 @@ from tests.unit import client
 
 class TestInsertClientInput(unittest.TestCase):
     def setUp(self):
-        self.client_input = {                    
+        self.client_input = {
                     "gender": "female",
                     "name": {
                         "title": "mrs",
@@ -66,7 +66,7 @@ class TestInsertClientInput(unittest.TestCase):
 
 class TestClientOutput(unittest.TestCase):
     def setUp(self):
-        self.client_output = {            
+        self.client_output = {
             "client_type": "normal",
             "gender": "m",
             "name": {

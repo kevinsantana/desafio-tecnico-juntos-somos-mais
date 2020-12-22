@@ -1,11 +1,6 @@
-FROM python:3.8-alpine3.12
+FROM centos/python-38-centos7
 
-# ENV VARS
-ARG MONGO_DB
-ARG MONGO_HOST
-ARG MONGO_PASS
-ARG MONGO_USR
-ARG MONGO_PORT
+USER root
 
 ENV MONGO_DB="$MONGO_DB"
 ENV MONGO_HOST="$MONGO_HOST"
@@ -13,9 +8,13 @@ ENV MONGO_PASS="$MONGO_PASS"
 ENV MONGO_USR="$MONGO_USR"
 ENV MONGO_PORT="$MONGO_PORT"
 
-RUN apk add build-base \
-    && apk add poppler-utils --no-cache
+# DEPENDENCIES
+RUN yum install -y \
+        poppler-utils
 
+RUN yum clean all
+
+# INSTALL APPLICATION
 COPY ./cadastro_clientes /deploy/cadastro_clientes
 COPY ./docs /deploy/docs
 COPY setup.py /deploy
@@ -26,6 +25,3 @@ WORKDIR /deploy
 
 RUN pip install -e .
 RUN pip install pytest
-
-EXPOSE 7000
-CMD ["gunicorn", "--bind=0.0.0.0:7000", "--workers=3", "--worker-class=uvicorn.workers.UvicornWorker", "--timeout=174000", "cadastro_clientes:app"]

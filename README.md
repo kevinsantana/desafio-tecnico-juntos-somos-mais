@@ -44,6 +44,14 @@ bash run.sh
 
 Com a aplicação no ar, basta acessar o [ReDoc](http://localhost:7000/v1/docs) para saber como utilizar cada um dos *endpoints* e para utilizar os *endpoints* acesse o [Swagger](http://localhost:7000/v1/swagger).
 
+Antes de iniciar a aplicação, verifique se a base de dados foi carregada conferindo os _logs_ do container `etl_clientes`, através do comando:
+
+```bash
+docker container logs -f etl_clientes
+```
+
+Além de poder verificar a quantidade e o andamento da carga da base de dados é possível verificar se o status da aplicação está em `Ready`, dessa maneira é possível consumir os _endpoints_.
+
 ## Executando testes
 
 Os testes da aplicação realizam a validação das respostas às requisições dos endpoints, validando o código de retorno esperado, o conteúdo do retorno e o tipo do retorno.
@@ -85,7 +93,6 @@ Com a aplicação _dockerizada_ e testada, é possível efetuar o _deploy_ em um
 * [gunicorn](https://gunicorn.org)
 * [requests](https://requests.readthedocs.io/en/master/)
 * [sphinx](https://www.sphinx-doc.org/en/master/)
-* [uvloop](uvloop)
 
 ## Versionamento
 
