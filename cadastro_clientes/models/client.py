@@ -34,7 +34,6 @@ class ClientType(str, Enum):
 
 
 class ClientInsert(CustomBaseModel):
-    collection: str
     client_type: Optional[str]
     gender: str
     name: dict
@@ -53,7 +52,6 @@ class ClientInsert(CustomBaseModel):
 
     class Config:
         schema_extra = {
-                "collection": "colecao",
                 "client_type": "a",
                 "gender": "m",
                 "name": {
@@ -107,7 +105,6 @@ class ClientInsert(CustomBaseModel):
 
 class ClientShow(CustomBaseModel):
     id: Optional[str] = Field(alias="_id", hidden=True)
-    collection: Optional[str] = Field(hidden=True)
     client_type: Optional[str]
     gender: str
     name: dict

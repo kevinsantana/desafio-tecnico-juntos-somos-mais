@@ -14,7 +14,22 @@ services:
       - /cadastro/data/db:/data/db
       - ./cadastro_clientes/script/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks: 
+      - cadastro-network  
+
+  etl-clientes:
+    container_name: etl-clientes
+    image: cadastro_clientes:1.0.0
+    command: python3 /deploy/cadastro_clientes/script/format_client_input.py
+    environment:
+      - MONGO_DB
+      - MONGO_HOST
+      - MONGO_PASS 
+      - MONGO_USR
+      - MONGO_PORT
+    networks:
       - cadastro-network
+    depends_on:
+      - db_cadastro
 
   cadastro-clientes:
     container_name: cadastro

@@ -5,8 +5,7 @@ from tests.unit import client
 
 class TestInsertClientInput(unittest.TestCase):
     def setUp(self):
-        self.client_input = {
-                    "collection": "test",
+        self.client_input = {                    
                     "gender": "female",
                     "name": {
                         "title": "mrs",
@@ -44,9 +43,9 @@ class TestInsertClientInput(unittest.TestCase):
                         "thumbnail": "https://randomuser.me/api/portraits/thumb/women/46.jpg"
                         }
             }
-        self.response_insert = client.post("/v1/client/insert", json=self.client_input)
+        self.client_collection = "test"
+        self.response_insert = client.post(f"/v1/client/{self.client_collection}/insert", json=self.client_input)
         self.client_id = self.response_insert.json().get("result")[0]
-        self.client_collection = self.client_input["collection"]
         self.response_get_client = client.get(f"/v1/client/{self.client_collection}/{self.client_id}")
 
     def test_client_input_insert(self):
@@ -67,8 +66,7 @@ class TestInsertClientInput(unittest.TestCase):
 
 class TestClientOutput(unittest.TestCase):
     def setUp(self):
-        self.client_output = {
-            "collection": "test",
+        self.client_output = {            
             "client_type": "normal",
             "gender": "m",
             "name": {
@@ -109,10 +107,10 @@ class TestClientOutput(unittest.TestCase):
             "object_id_input": "5fde4604c11bbefc9b217f62"
         }
         self.registry_qtd = 15
-        self.response_insert = [client.post("/v1/client/insert",
+        self.client_collection = "test"
+        self.response_insert = [client.post(f"/v1/client/{self.client_collection}/insert",
                                             json=self.client_output)
                                 for _ in range(self.registry_qtd)]
-        self.client_collection = self.client_output["collection"]
         self.client_type = self.client_output["client_type"]
         self.client_region = self.client_output["location"]["region"]
         self.response_get_by_type_and_region = client.get(f"/v1/client/{self.client_collection}/{self.client_type}/{self.client_region}?offset=1&qtd={self.registry_qtd}") # noqa

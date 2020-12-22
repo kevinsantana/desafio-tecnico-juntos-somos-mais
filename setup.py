@@ -15,6 +15,7 @@ run_requirements = [
     "sphinx-rtd-theme==0.1.9",
     "recommonmark==0.6.0",
     "aiofiles==0.5.0",
+    "numpy==1.19.4",
 ]
 
 here = path.abspath(path.dirname(__file__))
