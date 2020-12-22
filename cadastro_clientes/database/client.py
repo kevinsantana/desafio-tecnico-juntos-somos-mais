@@ -5,13 +5,12 @@ from cadastro_clientes.database import Database
 
 
 class Client(Database):
-    def __init__(self, collection: str, _id: str = None, gender: str = None, name: dict = None,
+    def __init__(self, _id: str = None, gender: str = None, name: dict = None,
                  location: dict = None, email: str = None, picture: dict = None,
                  dob: dict = None, registered=None, phone: str = None,
                  cell: str = None, client_type: str = None, birthday: float = None,
                  telephone_numbers: list = None, mobile_numbers: list = None,
                  nationality: str = None, object_id_input: str = None):
-        self.__collection = collection
         self.__id = _id
         self.__gender = gender
         self.__name = name
@@ -32,10 +31,6 @@ class Client(Database):
     @property
     def id(self):
         return str(self.__id)
-
-    @property
-    def collection(self):
-        return self.__collection
 
     @property
     def gender(self):
@@ -111,17 +106,17 @@ class Client(Database):
                 new_dict[key.replace("_Client_", "")] = value
         return new_dict
 
-    def insert(self):
+    def insert(self, collection: str):
         if self.__object_id_input:
             self.object_id_input = self.object_id_input
-        document_id = super().insert(collection=self.__collection, document=self.dict())
+        document_id = super().insert(collection=collection, document=self.dict())
         return document_id
 
-    def find_by_region_and_type(self, region: str, client_type: str, offset: int = 0,
-                                qtd: int = 10):
+    def find_by_region_and_type(self, region: str, client_type: str, collection: str,
+                                offset: int = 0, qtd: int = 10):
         sort_options = [("$natural", pymongo.ASCENDING)]
         query = {"location.region": region, "client_type": client_type}
-        documents, total = super().find_all(collection=self.__collection,
+        documents, total = super().find_all(collection=collection,
                                             sort_options=sort_options,
                                             offset=offset, qtd=qtd,
                                             filter=query)

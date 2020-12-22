@@ -1,5 +1,3 @@
-from loguru import logger
-
 from cadastro_clientes.database.client import Client
 from cadastro_clientes.exceptions.client import (
     ClientNotFoundException, ColllectionNotFoundException, FilterClientException
@@ -13,7 +11,7 @@ def _objectId_to_str(client: dict):
     return client
 
 
-def insert(client_data: dict) -> dict:
+def insert(client_data: dict, collection: str) -> dict:
     """
     Insere um cliente no banco de dados.
 
@@ -22,8 +20,7 @@ def insert(client_data: dict) -> dict:
     :return: ObjectId do documento gravado
     :rtype: str
     """
-    logger.debug(client_data)
-    return Client(**client_data).insert()
+    return Client(**client_data).insert(collection=collection)
 
 
 def find_by_region_and_type(region: str, client_type: str, offset: str, qtd: str,
@@ -45,9 +42,9 @@ def find_by_region_and_type(region: str, client_type: str, offset: str, qtd: str
     """
     if not region and not client_type:
         raise FilterClientException(416, region=region, client_type=client_type)
-    clients, total = Client(collection=collection).find_by_region_and_type(region=region, client_type=client_type,
-                                                                           offset=offset-1, qtd=qtd)
-    # logger.debug(clients[-1].keys())
+    clients, total = Client().find_by_region_and_type(region=region, client_type=client_type,
+                                                      qtd=qtd, offset=offset-1,
+                                                      collection=collection)
     return [_objectId_to_str(client) for client in clients], total
 
 
@@ -63,7 +60,7 @@ def find_by_id(collection: str, client_id: str):
     :rtype: dict
     :raises ClientNotFoundException: Caso o cliente informado não seja encontrado
     """
-    client = Client(collection=collection).find_by_id(collection=collection, client_id=client_id)
+    client = Client().find_by_id(collection=collection, client_id=client_id)
     if not client:
         raise ClientNotFoundException(404, client_id)
     client = _objectId_to_str(client)
@@ -82,7 +79,7 @@ def delete_one(collection: str, client_id: str):
     :rtype: boolean
     :raises ClientNotFoundException: Se o cliente informado não foi encontrado
     """
-    if Client(collection=collection).delete_one(collection=collection, client_id=client_id):
+    if Client().delete_one(collection=collection, client_id=client_id):
         return True
     else:
         raise ClientNotFoundException(404, client_id)
@@ -98,7 +95,7 @@ def delete_collection(collection: str):
     :rtype: boolean
     :raises ColllectionNotFoundException: Collection informada não foi encontrada
     """
-    if Client(collection=collection).delete_collection(collection):
+    if Client().delete_collection(collection=collection):
         return True
     else:
         ColllectionNotFoundException(404, collection)

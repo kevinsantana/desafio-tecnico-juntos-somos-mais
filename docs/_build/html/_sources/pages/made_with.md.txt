@@ -7,4 +7,3 @@
 * [gunicorn](https://gunicorn.org)
 * [requests](https://requests.readthedocs.io/en/master/)
 * [sphinx](https://www.sphinx-doc.org/en/master/)
-* [uvloop](uvloop)
