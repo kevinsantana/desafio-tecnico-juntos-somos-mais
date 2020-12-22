@@ -1,0 +1,60 @@
+version: "3.5"
+
+services:
+  db_cadastro:
+    container_name: db_cadastro
+    image: mongo:4.2-bionic
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE
+    ports: 
+      - 27017:27017
+    volumes:
+      - /cadastro/data/db:/data/db
+      - ./cadastro_clientes/script/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks: 
+      - cadastro-network  
+
+  etl_clientes:
+    container_name: etl_clientes
+    image: cadastro_clientes:1.0.0
+    command: python3 /deploy/cadastro_clientes/script/etl_client.py
+    environment:
+      - MONGO_DB
+      - MONGO_HOST
+      - MONGO_PASS 
+      - MONGO_USR
+      - MONGO_PORT
+    networks:
+      - cadastro-network
+    depends_on:
+      - db_cadastro
+
+  cadastro-clientes:
+    container_name: cadastro
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cadastro_clientes:1.0.0
+    command: ["gunicorn", "--bind=0.0.0.0:7000", "--workers=3", "--worker-class=uvicorn.workers.UvicornWorker", "--timeout=174000", "cadastro_clientes:app"]
+    environment:
+      - MONGO_DB
+      - MONGO_HOST
+      - MONGO_PASS 
+      - MONGO_USR
+      - MONGO_PORT
+    volumes:
+      - .:/deploy
+    ports:
+      - "7000:7000"
+    networks:
+      - cadastro-network
+    depends_on:
+      - etl_clientes
+      - db_cadastro
+
+networks:
+  cadastro-network:
+    name: cadastro-network
+    driver: bridge
