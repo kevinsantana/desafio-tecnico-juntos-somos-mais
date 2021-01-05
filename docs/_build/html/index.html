@@ -158,11 +158,18 @@
 </div>
 <div class="section" id="introducao">
 <h1>Introdução<a class="headerlink" href="#introducao" title="Link permanente para este título">¶</a></h1>
-<p>A solução executa um pré-tratamento dos dados, classifica os clientes e persiste os dados em banco de dados.
-Permitindo que os clientes sejam recuperados por meio da região do usuário e seu tipo de classificação.</p>
-<p>A API foi construída com <a class="reference external" href="https://fastapi.tiangolo.com/">FastApi</a>, que possuí uma excelente validação de tipos,
-tanto de entrada como de saída da API, usando <a class="reference external" href="https://pydantic-docs.helpmanual.io/">Pydantic</a>. Além disso <cite>FastApi</cite>
-documenta automaticamente a API utlizando <a class="reference external" href="https://github.com/OAI/OpenAPI-Specification">OpenAPI</a>.</p>
+<p>A aplicação foi construída em uma arquitetura de <a class="reference external" href="https://martinfowler.com/articles/microservices.html">Microsserviço</a>,
+em que cada container compõe um parte do todo, são eles:</p>
+<ul class="simple">
+<li><p><cite>db_cadastro</cite>: É o banco de dados MongoDB responsável por manter o cadastro dos clientes;</p></li>
+<li><p><cite>etl_clientes</cite>: É quem faz a carga no banco de dados a partir de um arquivo <cite>CSV</cite> ou <cite>JSON</cite> via requisição http;</p></li>
+<li><p><cite>cadastro-clientes</cite>: É a API que expõe e permite a manipulação dos clientes.</p></li>
+</ul>
+<p>A solução executa um pré-tratamento dos dados, classifica os clientes e persiste os dados em banco de dados. Permitindo que
+os clientes sejam recuperados por meio da região do usuário e seu tipo de classificação.</p>
+<p>A API foi construída com <a class="reference external" href="https://fastapi.tiangolo.com/)">FastApi</a>, que possuí uma excelente validação de tipos,
+tanto de entrada como de saída da API, usando <a class="reference external" href="https://pydantic-docs.helpmanual.io/">Pydantic</a>.
+Além disso <cite>FastApi</cite> documenta automaticamente a API utlizando <a href="#id1"><span class="problematic" id="id2">`OpenAPI https://github.com/OAI/OpenAPI-Specification&gt;`_</span></a>.</p>
 </div>
 <div class="section" id="links">
 <h1>Links<a class="headerlink" href="#links" title="Link permanente para este título">¶</a></h1>
