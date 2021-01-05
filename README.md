@@ -2,31 +2,21 @@
 
 Cadastro de clientes é um microsserviço para manter clientes através de arquivo(s) `JSON` e/ou `CSV`.
 
+A aplicação foi construída em uma arquitetura de [microsserviço](https://martinfowler.com/articles/microservices.html), em que cada container compõe um parte do todo, são eles:
+
+* `db_cadastro`: É o banco de dados MongoDB responsável por manter o cadastro dos clientes;
+* `etl_clientes`: É quem faz a carga no banco de dados a partir de um arquivo `CSV` ou `JSON` via requisição http;
+* `cadastro-clientes`: É a API que expõe e permite a manipulação dos clientes.
+
 A solução executa um pré-tratamento dos dados, classifica os clientes e persiste os dados em banco de dados. Permitindo que os clientes sejam recuperados por meio da região do usuário e seu tipo de classificação.
 
 A API foi construída com [FastApi](https://fastapi.tiangolo.com/), que possuí uma excelente validação de tipos, tanto de entrada como de saída da API, usando [Pydantic](https://pydantic-docs.helpmanual.io/). Além disso `FastApi` documenta automaticamente a API utlizando [OpenAPI](https://github.com/OAI/OpenAPI-Specification).
 
 ## Prerequisites
 
-Sugere-se a criação de um ambiente virtual para instalação das dependências da aplicação, como por exemplo o [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/).
+É preciso configurar o [docker](https://docs.docker.com/) e o [docker-compose](https://docs.docker.com/compose/) para consumir o projeto.
 
-Para instalar as dependências do projeto, execute:
-
-```bash
-pip3 install -e .
-```
-
-É preciso, também, ter o [docker](https://docs.docker.com/) e o [docker-compose](https://docs.docker.com/compose/) instalados. As variáveis de ambiente listadas abaixo devem estar exportadas no terminal para o funcionamento da aplicação. Enquanto o valor das variáveis mudam conforme a necessidade de execução, os nomes devem permanecer os mesmos, são eles:
-
-* `MONGO_INITDB_ROOT_USERNAME`: _Username_ criado no momento de execução do container;
-* `MONGO_INITDB_ROOT_PASSWORD`: _Password_ criado no momento de execução do container;
-* `MONGO_INITDB_DATABASE`: _database_ criado no momento de execução do container;
-
-* `MONGO_DB`: Nome do mongodb para armazenamento dos dados de output;
-* `MONGO_HOST`: _Hostname_ do mongodb;
-* `MONGO_PASS`: Senha do mongodb para armazenamento dos dados de output;
-* `MONGO_USR`: Usuário do mongodb para armazenamento dos dados de output;
-* `MONGO_PORT`: Porta do mongodb para armazenamento dos dados de output;
+As variáveis de ambiente utilizadas pelos containers estão configuradas no arquivo [cadastro.yml](cadastro.yml), e são exatamente as mesmas configuradas no arquivo [config.py](cadastro_clientes/config.py) que contém os dados para conexão com o banco de dados através do [Pymongo](https://pymongo.readthedocs.io/en/stable/).
 
 ### Instalação e Execução
 
@@ -64,13 +54,6 @@ Com o container da API nomeado como `cadastro`, execute:
 docker container exec -it cadastro pytest -v
 ```
 
-ou, ainda, desde que se possua um banco de dados `mongoDB` em execução na sua máquina, e com as mesmas configurações do arquivo [mongo-init.js](./cadastro_clientes/script/mongo-init.js), é possível executar os testes através de um terminal no mesmo nível de pastas da pasta [cadastro_clientes](./cadastro_clientes), da seguinte maneira:
-
-```bash
-pip3 install pytest
-pytest -v
-```
-
 ### Estilo de código
 
 Esse código segue o padrão PEP8 e pode ser testado com a biblioteca [PyLama](https://github.com/klen/pylama) como no exemplo a seguir
@@ -82,7 +65,7 @@ pylama -o pylama.ini .
 
 ## Deploy
 
-Com a aplicação _dockerizada_ e testada, é possível efetuar o _deploy_ em um orquestrador de _containers_ a exemplo do [Kubernetes](https://kubernetes.io/pt/), ou mesmo, com o orquestrador nativo do Docker - [Swarm](https://docs.docker.com/engine/swarm/).
+Com a aplicação _dockerizada_ e testada, é possível efetuar o _deploy_ em um orquestrador de _containers_ a exemplo do [Kubernetes](https://kubernetes.io/pt/), ou mesmo, com o orquestrador nativo do Docker [Swarm](https://docs.docker.com/engine/swarm/).
 
 ## Construído Com
 

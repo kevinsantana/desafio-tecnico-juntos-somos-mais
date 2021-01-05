@@ -5,9 +5,9 @@ services:
     container_name: db_cadastro
     image: mongo:4.2-bionic
     environment:
-      - MONGO_INITDB_ROOT_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD
-      - MONGO_INITDB_DATABASE
+      MONGO_INITDB_ROOT_USERNAME: cadastro
+      MONGO_INITDB_ROOT_PASSWORD: 1q2w3e
+      MONGO_INITDB_DATABASE: cadastro
     ports: 
       - 27017:27017
     volumes:
@@ -21,11 +21,11 @@ services:
     image: cadastro_clientes:1.0.0
     command: python3 /deploy/cadastro_clientes/script/etl_client.py
     environment:
-      - MONGO_DB
-      - MONGO_HOST
-      - MONGO_PASS 
-      - MONGO_USR
-      - MONGO_PORT
+      MONGO_DB: cadastro
+      MONGO_HOST: db_cadastro
+      MONGO_PASS: 1q2w3e
+      MONGO_USR: cadastro
+      MONGO_PORT: 27017
     networks:
       - cadastro-network
     depends_on:
@@ -39,11 +39,11 @@ services:
     image: cadastro_clientes:1.0.0
     command: ["gunicorn", "--bind=0.0.0.0:7000", "--workers=3", "--worker-class=uvicorn.workers.UvicornWorker", "--timeout=174000", "cadastro_clientes:app"]
     environment:
-      - MONGO_DB
-      - MONGO_HOST
-      - MONGO_PASS 
-      - MONGO_USR
-      - MONGO_PORT
+      MONGO_DB: cadastro
+      MONGO_HOST: db_cadastro
+      MONGO_PASS: 1q2w3e
+      MONGO_USR: cadastro
+      MONGO_PORT: 27017
     volumes:
       - .:/deploy
     ports:

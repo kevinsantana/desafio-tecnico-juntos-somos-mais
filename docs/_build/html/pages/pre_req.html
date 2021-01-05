@@ -155,22 +155,8 @@
             
   <div class="section" id="prerequisites">
 <h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Link permanente para este título">¶</a></h1>
-<p>Sugere-se a criação de um ambiente virtual para instalação das dependências da aplicação, como por exemplo o <a class="reference external" href="https://virtualenvwrapper.readthedocs.io/en/latest/">virtualenvwrapper</a>.</p>
-<p>Para instalar as dependências do projeto, execute:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install -e .
-</pre></div>
-</div>
-<p>É preciso, também, ter o <a class="reference external" href="https://docs.docker.com/">docker</a> e o <a class="reference external" href="https://docs.docker.com/compose/">docker-compose</a> instalados. As variáveis de ambiente listadas abaixo devem estar exportadas no terminal para o funcionamento da aplicação. Enquanto o valor das variáveis mudam conforme a necessidade de execução, os nomes devem permanecer os mesmos, são eles:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">MONGO_INITDB_ROOT_USERNAME</span></code>: <em>Username</em> criado no momento de execução do container;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MONGO_INITDB_ROOT_PASSWORD</span></code>: <em>Password</em> criado no momento de execução do container;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MONGO_INITDB_DATABASE</span></code>: <em>database</em> criado no momento de execução do container;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MONGO_DB</span></code>: Nome do mongodb para armazenamento dos dados de output;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MONGO_HOST</span></code>: <em>Hostname</em> do mongodb;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MONGO_PASS</span></code>: Senha do mongodb para armazenamento dos dados de output;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MONGO_USR</span></code>: Usuário do mongodb para armazenamento dos dados de output;</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MONGO_PORT</span></code>: Porta do mongodb para armazenamento dos dados de output;</p></li>
-</ul>
+<p>É preciso configurar o <a class="reference external" href="https://docs.docker.com/">docker</a> e o <a class="reference external" href="https://docs.docker.com/compose/">docker-compose</a> para consumir o projeto.</p>
+<p>As variáveis de ambiente utilizadas pelos containers estão configuradas no arquivo <a class="reference external" href="cadastro.yml">cadastro.yml</a>, e são exatamente as mesmas configuradas no arquivo <a class="reference external" href="cadastro_clientes/config.py">config.py</a> que contém os dados para conexão com o banco de dados através do <a class="reference external" href="https://pymongo.readthedocs.io/en/stable/">Pymongo</a>.</p>
 </div>
 
 
